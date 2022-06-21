@@ -1,0 +1,38 @@
+import numpy as np;from matplotlib import pyplot as plt
+
+X = np.array([[2104,5,1,45],[1416,3,2,40],[1534,3,2,30],[852,2,1,36]])
+Y = np.array([1,0,1,0])
+
+def feature_scaling(X,Y):
+    m = X.shape[0];n = X.shape[1]
+    # Sclaing X
+    X_scale = np.ones(n)
+    for col in range(0,n):
+        X_scale[col]=max(X[:,col])
+        X[:,col]=X[:,col]/max(X[:,col])
+    # Scaling Y
+    Y_scale = max(Y)
+    Y = Y/max(Y)
+
+    return X, Y, X_scale, Y_scale
+
+X, Y, X_scale, Y_scale = feature_scaling(X,Y)
+
+m = X.shape[0];n = X.shape[1] # m, n
+theta = np.ones(2*n+1)/2 # Theta
+X = np.c_[np.ones(m),X,X**2] # Add X_0 and X_1^2, X_2^2, X_3^2 to matrix X
+
+# Calculate J
+hypothesis = 1/(1+np.exp(-np.sum(theta*X,1)))
+
+h = np.zeros(n)
+for i in range(m-1):
+    if Y[i]>0:
+        h[i] = -np.log(hypothesis[i])  
+    else: 
+        h[i] = -np.log(1-hypothesis[i])
+
+# J = Y*np.log(hypothesis)+(1-Y)*np.log(1-hypothesis)
+
+print(hypothesis)
+print(h)
