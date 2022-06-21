@@ -24,12 +24,13 @@ def multivar_regression(X: np.matrix,Y: np.array):
 
     # Cost function
     def cost_function(X: np.matrix,Y: np.array,theta: np.array):
-        alpha = 0.0001 # Alpha
+        alpha = 0.001 # Alpha
         m = X.shape[0];n = X.shape[1]-1
-        hypothesis = np.sum(np.multiply(np.tile(theta,(n,1)),X),1)
-        J = m/2*np.sum(np.subtract(hypothesis,y)**2)
-        theta = theta-(np.sum(np.tile(hypothesis-Y,(n+1,1)).T*X,0)*alpha/m)
-        
+        hypothesis = np.sum(np.tile(theta,(m,1))*X,1)
+
+        hypothesis = np.sum(np.tile(theta,(m,1))*X,1)
+        J = 1/m/2*np.sum((hypothesis-Y)**2)
+        theta = theta-(alpha/m*sum(np.tile(np.sum(np.tile(theta,(m,1))*X,1)-Y,(n+1,1)).T*X,1))
         return J, theta
 
     iters = range(1000)
@@ -37,9 +38,11 @@ def multivar_regression(X: np.matrix,Y: np.array):
     for i in iters:
         J, theta = cost_function(X,Y,theta)
         J_iters[i]=J
-    plt.plot(iters,J_iters)
+#    plt.plot(iters,J_iters)
+    return theta
+
 x = np.array([[2104,5,1,45],[1416,3,2,40],[1534,3,2,30],[852,2,1,36]])
 y = np.array([460,232,315,178])
 
-multivar_regression(x,y)
-plt.show()
+print(multivar_regression(x,y))
+#plt.show()
